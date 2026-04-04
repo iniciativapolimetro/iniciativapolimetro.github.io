@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscando la pregunta correcta | Data Science Products</title>
+    <style>
+        /* Variables de colores y fuentes */
+        :root {
+            --primary-color: #2563eb; /* Azul tech */
+            --primary-hover: #1d4ed8;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --text-main: #334155;
+            --text-light: #f1f5f9;
+            --font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Reseteo básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-main);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* Navegación */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Botones */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 2px solid var(--text-light);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--text-light);
+            color: var(--dark-bg);
+        }
+
+        /* Hero Section */
+        .hero {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            padding: 8rem 5%;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        /* Secciones Generales */
+        section {
+            padding: 5rem 5%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark-bg);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            color: #64748b;
+        }
+
+        /* Manifiesto (Grid) */
+        .manifiesto-bg {
+            background-color: white;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--light-bg);
+            padding: 2.5rem;
+            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-bg);
+        }
+
+        /* Roadmap */
+        .roadmap-bg {
+            background-color: var(--light-bg);
+        }
+
+        .roadmap-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roadmap-item {
+            background: white;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .roadmap-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Unete / CTA Final */
+        .unete {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 6rem 5%;
+        }
+
+        .unete h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .unete p {
+            max-width: 700px;
+            margin: 0 auto 2.5rem;
+            font-size: 1.1rem;
+            color: #e0e7ff;
+        }
+
+        .btn-white {
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid white;
+        }
+
+        .btn-white:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-bg);
+            color: #94a3b8;
+            text-align: center;
+            padding: 2rem 5%;
+            font-size: 0.9rem;
+        }
+
+        /* Responsividad básica */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; /* Simplificado para móvil en esta versión base */ }
+            .hero-buttons { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">&lt;DataProducts /&gt;</div>
+        <div class="nav-links">
+            <a href="#manifiesto">Manifiesto</a>
+            <a href="#roadmap">Hoja de Ruta</a>
+            <a href="#unete" class="btn btn-primary" style="margin-left: 2rem; padding: 0.5rem 1rem;">Únete</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Buscando la pregunta correcta.</h1>
+        <p>Construimos productos de ciencia de datos enfocados en descubrir el verdadero valor oculto en la información. Cero consultoría, 100% código escalable.</p>
+        <div class="hero-buttons">
+            <a href="#manifiesto" class="btn btn-primary">Conoce nuestra visión</a>
+            <a href="https://github.com/TU_USUARIO" target="_blank" class="btn btn-outline">Explorar en GitHub</a>
+        </div>
+    </header>
+
+    <section id="manifiesto" class="manifiesto-bg">
+        <h2 class="section-title">Menos respuestas automáticas.<br>Más curiosidad.</h2>
+        <p class="section-subtitle">El mundo corporativo aplica algoritmos complejos a problemas equivocados. Creemos que el éxito en Data Science radica en la calidad del problema que resuelves, no en la cantidad de gráficos que generas.</p>
+        
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-icon">💡</div>
+                <h3>Exploración</h3>
+                <p>Diseñamos herramientas para iterar y entender a fondo los datos antes de siquiera pensar en modelar.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <h3>Producto sobre proyecto</h3>
+                <p>No hacemos "tableros a medida" que mueren en un mes. Creamos software vivo que evoluciona.</p>
+            </div>
+            <div class="card">
+                <div class="card-icon">🚀</div>
+                <h3>Escalabilidad</h3>
+                <p>Un problema resuelto hoy, empaquetado y optimizado para ser utilizado mil veces mañana.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap" class="roadmap-bg">
+        <h2 class="section-title">Nuestra hoja de ruta</h2>
+        <p class="section-subtitle">Actualmente estamos en la fase de prototipado. Aquí puedes ver hacia dónde vamos con total transparencia.</p>
+        
+        <div class="roadmap-container">
+            <div class="roadmap-item">
+                <h4>Fase 1: Cimientos (Actual)</h4>
+                <p>Investigación de mercado, estructuración de la arquitectura base en la nube y formación del equipo núcleo.</p>
+            </div>
+            <div class="roadmap-item">
+                <h4>Fase 2: MVP</h4>
+                <p>Desarrollo y lanzamiento del Producto Mínimo Viable (MVP) en modo beta cerrado para pruebas de estrés.</p>
+            </div>
+            <div class="roadmap-item">
+                <h4>Fase 3: Escalamiento</h4>
+                <p>Iteración basada en feedback real, apertura a primeros usuarios y expansión de funcionalidades.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="unete" class="unete">
+        <h2>Estamos ensamblando el motor. Faltan piezas.</h2>
+        <p>No tenemos clientes todavía. No buscamos atajos. Buscamos mentes curiosas, desarrolladores, ingenieros de datos y soñadores que quieran construir desde la línea de código número uno.</p>
+        <a href="mailto:tu-correo@ejemplo.com" class="btn btn-white">Únete a la conversación</a>
+    </section>
+
+    <footer>
+        <p>Copyright &copy; 2026. Construido en etapa temprana. Alojado en GitHub Pages.</p>
+    </footer>
+
+</body>
+</html>
