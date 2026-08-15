@@ -9,8 +9,8 @@ precios ni información interna: eso vive en los repos privados del emprendimien
 Página pública de la marca Polimetro.
 
 ## Estado
-**en producción** — publicada en `https://iniciativapolimetro.github.io`. Contenido
-pendiente de realinear al pivote a political intelligence (ver Backlog).
+**en producción** — `2026-08-15` — publicada en `https://iniciativapolimetro.github.io`.
+Contenido pendiente de realinear al pivote a political intelligence (ver Backlog).
 
 ## MVP hecho cuando:
 - [x] Página publicada y accesible en la URL pública
@@ -22,7 +22,7 @@ pendiente de realinear al pivote a political intelligence (ver Backlog).
 - **Correr:** abrir `index.html` en un navegador para ver cambios localmente.
 - **Testear:** revisión manual en el navegador antes de hacer push (no hay tests
   automatizados; declarado explícito, no es una omisión).
-- **Publicar:** push a `main` → GitHub Pages republica sola en unos minutos.
+- **Publicar:** ver `README.md` (dato canónico; no se repite aquí).
 
 ## Stack y entorno
 HTML/CSS/JS en un único archivo (`index.html`, ~478 KB). Sin build, sin dependencias
@@ -52,4 +52,5 @@ _(sin decisiones de arquitectura registradas todavía)_
 ## Cierre de sesión
 Antes de cerrar una sesión de trabajo aquí: agregar una entrada (1-3 líneas) al inicio
 de `BITACORA.md` (`AAAA-MM-DD` — qué se hizo. Pendiente: qué quedó) y actualizar
-`## Estado` solo si cambió.
+`## Estado` solo si cambió. Detalle del protocolo → `../CLAUDE.md` (fuera de este
+repo, en el espacio de trabajo local).
