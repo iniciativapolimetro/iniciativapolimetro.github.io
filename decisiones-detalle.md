@@ -3,6 +3,22 @@
 Índice en `CLAUDE.md`. Lo más nuevo arriba. Las superadas se marcan y se mueven a
 `decisiones-archivo.md` (§7 de la raíz: marcar, nunca borrar).
 
+`2026-09-26` — **Las visitas se miden con Google Analytics 4 (el ID `G-HH0W14NTWF`, creado
+en abril), con la configuración en un archivo propio y activo solo en el dominio público.**
+
+**Por qué.** El usuario quiere saber cuántos visitan la landing y cuántos llegan al
+dashboard, y de dónde vienen (LinkedIn, newsletter). Ya tenía la cuenta y la propiedad.
+
+**Cómo.** `public/assets/js/analytics.js` (sin script en línea, así la CSP no necesita
+`'unsafe-inline'`); la CSP permite solo los dominios de Google que GA4 usa. Sin Google
+Signals ni señales de publicidad; retención de 2 meses. Aviso en el pie. Se reusa el ID de
+abril: conserva los datos anteriores.
+
+**Descartado (recomendación de Claude, que el usuario no tomó):** Cloudflare Web
+Analytics u otro servicio sin cookies, que evitaba el aviso de consentimiento. **Riesgo
+declarado:** la ley 21.719 entra en vigencia el 1-12-2026; hay que revisar el
+consentimiento antes de esa fecha (Backlog).
+
 `2026-09-26` — **Orden de nivel industria y seguridad: se publica solo `public/` con GitHub
 Actions, con nombres de archivo del sitio en inglés, política de seguridad de contenido en
 cada página, y commits firmados con el correo de la marca.**

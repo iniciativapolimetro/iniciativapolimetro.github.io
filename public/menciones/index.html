@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Seguridad: solo se carga lo del propio sitio (los datos van en data.js, no se piden por
-     red) y ningún texto de los datos entra como HTML (app.js usa textContent). -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<!-- Seguridad: solo se carga lo del propio sitio más Google Analytics (sus dominios, nada
+     más). Los datos van en data.js, no se piden por red, y ningún texto de los datos entra
+     como HTML (app.js usa textContent). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://*.googletagmanager.com; style-src 'self'; font-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; connect-src https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Quién nombra a quién — Iniciativa Polímetro</title>
 <meta name="description" content="Menciones entre parlamentarios en la sala del Congreso Nacional de Chile, 1990-2030: quién nombra a quién, entre qué bloques y cómo cambia una trayectoria.">
@@ -20,6 +21,9 @@
 <link rel="stylesheet" href="../assets/brand/tokens.css">
 <link rel="stylesheet" href="../assets/brand/base.css">
 <link rel="stylesheet" href="styles.css">
+<!-- Medición de visitas: archivo del SITIO (landing/public/assets/js/), no de este repo; en
+     una vista local no existe y no se carga, a propósito. -->
+<script src="../assets/js/analytics.js" async></script>
 </head>
 <body>
 <a class="saltar" href="#tablero">Saltar al gráfico</a>
@@ -140,6 +144,7 @@
   <div class="contenedor">
     <p>Iniciativa Polímetro · Inteligencia del ecosistema político chileno</p>
     <p><a href="../#contacto">Escríbenos</a> · <a href="https://polimetro.substack.com/p/como-medimos">Cómo medimos</a></p>
+    <p class="aviso-privacidad">Usamos Google Analytics para contar visitas; sin publicidad.</p>
   </div>
 </footer>
 

@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Seguridad: GitHub Pages no permite cabeceras HTTP propias, así que van aquí. Solo se carga
-     lo del propio sitio; esta página no ejecuta JavaScript. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+     lo del propio sitio más Google Analytics (sus dominios, nada más); ningún script en línea. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' https://*.googletagmanager.com; style-src 'self'; font-src 'self'; img-src 'self' https://*.google-analytics.com https://*.googletagmanager.com; connect-src https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Iniciativa Polímetro — Buscamos la pregunta correcta</title>
 <meta name="description" content="Inteligencia del ecosistema político chileno: quién es quién, quién se relaciona con quién y qué posición tiene cada actor alrededor de un tema, con datos públicos y cada afirmación trazable a su fuente.">
@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="assets/brand/tokens.css">
 <link rel="stylesheet" href="assets/brand/base.css">
 <link rel="stylesheet" href="assets/css/home.css">
+<script src="assets/js/analytics.js" async></script>
 </head>
 <body>
 <a class="saltar" href="#contenido">Saltar al contenido</a>
@@ -211,6 +212,7 @@
   <div class="contenedor">
     <p>Iniciativa Polímetro · 2026 · Santiago de Chile</p>
     <p><a href="https://polimetro.substack.com/p/como-medimos">Cómo medimos</a> · <a href="https://www.linkedin.com/company/iniciativa-polimetro/">LinkedIn</a></p>
+    <p class="aviso-privacidad">Usamos Google Analytics para contar visitas; sin publicidad.</p>
   </div>
 </footer>
 </body>

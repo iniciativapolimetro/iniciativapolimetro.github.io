@@ -30,7 +30,7 @@ publica solo `public/` con GitHub Actions.
   y abrir `http://127.0.0.1:8765/`.
 - **Testear:** manual antes de cada push: escritorio y 375 px, sin scroll horizontal, los
   enlaces entre `/` y `/menciones/`, la landing legible sin JavaScript, consola sin
-  errores (la política de seguridad de contenido bloquea cualquier recurso externo). Lo
+  errores; después del push, la visita aparece en Google Analytics → Informes → Tiempo real (la política de seguridad de contenido bloquea cualquier recurso externo). Lo
   testeable en código (tokens, fuentes, contrato del dashboard) se testea en el generador
   (repo privado congress-radar).
 - **Regenerar lo generado** (desde congress-radar): `radar brand-css --destino
@@ -52,15 +52,22 @@ public/                     ← lo único que se publica
   assets/brand/               GENERADO por `radar brand-css`: tokens.css, base.css,
                               favicon.svg, fonts/ (woff2 + licencias OFL)
   assets/css/home.css         estilos propios de la landing (a mano, sin colores escritos)
+  assets/js/analytics.js      Google Analytics 4 (a mano; lo cargan landing, 404 y dashboard)
   assets/img/og.jpg           imagen para compartir enlaces
   menciones/                  GENERADO por `radar mentions-dashboard`
 .github/workflows/pages.yml   despliegue; acciones fijadas por hash
 ```
 
 **Seguridad del sitio:** cada página declara una política de seguridad de contenido
-(`Content-Security-Policy` en `<meta>`: solo recursos del propio sitio, sin JS en la
-landing) y `referrer` estricto; sin analítica, sin cookies, sin formularios. Lo generado
-publica solo agregados de parlamentarios (personas públicas): ni citas ni rutas.
+(`Content-Security-Policy` en `<meta>`: recursos del propio sitio más los dominios de
+Google Analytics, ningún script en línea) y `referrer` estricto; sin formularios. Lo
+generado publica solo agregados de parlamentarios (personas públicas): ni citas ni rutas.
+
+**Medición:** Google Analytics 4, ID `G-HH0W14NTWF` (propiedad creada en abril de 2026, en
+la cuenta de la marca). Mide visitas por página (`/` y `/menciones/`) y su origen. Sin
+Google Signals ni señales de publicidad; retención de 2 meses (ajuste hecho en la consola
+de GA). Solo se activa en el dominio público. **Usa cookies**: ver el pendiente de la ley
+21.719 en el Backlog. Aviso visible en el pie de cada página.
 
 ## Licencias de terceros
 | Componente | Versión | Licencia | Uso comercial | Origen |
@@ -68,6 +75,7 @@ publica solo agregados de parlamentarios (personas públicas): ni citas ni rutas
 | Tipografía Lato (400, 400 itálica, 700) | v25, subconjunto latino | SIL OFL 1.1 (`assets/brand/fonts/OFL-Lato.txt`) | Sí | fonts.gstatic.com / github.com/google/fonts |
 | Tipografía Playfair Display (600) | v40, subconjunto latino | SIL OFL 1.1 | Sí | ídem |
 | Tipografía IBM Plex Mono (500) | v20, subconjunto latino | SIL OFL 1.1 | Sí | ídem |
+| Google Analytics 4 (servicio, `gtag.js` cargado desde Google) | — | Términos de servicio de Google Analytics (no es código que se distribuya) | Sí | analytics.google.com |
 | GitHub Actions: checkout, configure-pages, upload-pages-artifact, deploy-pages | fijadas por hash en el flujo | MIT | Sí (corren en GitHub, no se distribuyen) | github.com/actions |
 | `og.jpg` (recorte del banner del kit de marca) | — | propio | Sí | kit de marca |
 | Dashboard `menciones/` | — | propio | Sí | `radar mentions-dashboard` |
@@ -87,10 +95,17 @@ Vacío = bien.
   en inglés (`assets/`, `styles.css`), URL pública en español (`/menciones/`).
 - `2026-09-26` — Commits firmados con el correo de la marca; el correo personal se borró
   del historial de este repo (reescritura con OK explícito del usuario).
+- `2026-09-26` — Visitas medidas con Google Analytics 4 (ID de abril), sin Signals ni
+  publicidad, activo solo en el dominio público; configuración en archivo propio (CSP sin
+  scripts en línea).
 - `2026-09-26` — Cabecera y pie se repiten a mano en cada página; se reevalúa con cuatro o
   más páginas.
 
 ## Backlog
+- **Antes del 1 de diciembre de 2026** (entrada en vigencia de la ley 21.719 de datos
+  personales): revisar si Google Analytics exige consentimiento previo y, si es así,
+  agregar un aviso de cookies o activar el «modo de consentimiento» de Google. Revisión
+  humana/legal: esto no es asesoría legal.
 - Probar en un celular real y con lector de pantalla.
 - Enlaces a Substack y LinkedIn como llamados a la acción, si hace falta.
 - Tema claro (hoy solo oscuro: la paleta está validada sobre la superficie oscura).

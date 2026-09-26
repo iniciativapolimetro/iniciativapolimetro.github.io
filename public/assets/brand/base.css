@@ -188,3 +188,4 @@ a.tarjeta:hover { border-color: var(--acento); color: inherit; }
 .sitio-pie .contenedor { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; }
 .sitio-pie p { margin: 0; font-size: 14px; color: var(--tinta-tenue); }
 .sitio-pie a { color: var(--tinta-secundaria); }
+.sitio-pie .aviso-privacidad { flex-basis: 100%; font-size: 13px; }
