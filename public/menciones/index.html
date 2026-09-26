@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Seguridad: solo se carga lo del propio sitio (los datos van en data.js, no se piden por
+     red) y ningún texto de los datos entra como HTML (app.js usa textContent). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Quién nombra a quién — Iniciativa Polímetro</title>
+<meta name="description" content="Menciones entre parlamentarios en la sala del Congreso Nacional de Chile, 1990-2030: quién nombra a quién, entre qué bloques y cómo cambia una trayectoria.">
+<meta property="og:title" content="Quién nombra a quién en el Congreso — Iniciativa Polímetro">
+<meta property="og:description" content="Treinta y seis años de menciones entre parlamentarios en la sala, por período, bloque y persona.">
+<meta property="og:locale" content="es_CL">
+<meta property="og:image" content="https://iniciativapolimetro.github.io/assets/img/og.jpg">
+<link rel="canonical" href="https://iniciativapolimetro.github.io/menciones/">
+<meta name="color-scheme" content="dark">
+<link rel="icon" href="../assets/brand/favicon.svg" type="image/svg+xml">
+<!-- Orden: tokens (generados desde publish.py) -> base de la marca -> lo propio del grafo. -->
+<link rel="stylesheet" href="../assets/brand/tokens.css">
+<link rel="stylesheet" href="../assets/brand/base.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="saltar" href="#tablero">Saltar al gráfico</a>
+
+<header class="sitio-cabecera">
+  <div class="contenedor">
+    <a class="sello" href="../">Iniciativa Polímetro</a>
+    <nav aria-label="Secciones del sitio">
+      <ul class="sitio-nav">
+        <li><a href="../#enfoque">Enfoque</a></li>
+        <li><a href="../#trabajo">Qué hacemos</a></li>
+        <li><a href="../#proceso">Cómo trabajamos</a></li>
+        <li><a href="./" aria-current="page">Datos</a></li>
+        <li><a href="../#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div class="contenedor tablero" id="tablero">
+<header class="cabecera">
+  <p class="rotulo-mono">Datos · Congreso Nacional de Chile</p>
+  <h1 id="titulo">Quién nombra a quién en el Congreso</h1>
+  <p class="subtitulo" id="subtitulo">Cargando los datos de diez períodos legislativos…</p>
+  <ul class="avisos" id="avisos" hidden></ul>
+</header>
+
+<section class="controles" aria-label="Controles del gráfico">
+  <fieldset class="control control-periodos">
+    <legend>Período</legend>
+    <div class="botones" id="periodos" role="radiogroup" aria-label="Período legislativo"></div>
+  </fieldset>
+  <fieldset class="control">
+    <legend>Corporación</legend>
+    <div class="botones" id="camaras" role="radiogroup" aria-label="Corporación"></div>
+  </fieldset>
+  <div class="control">
+    <label for="umbral">Vínculos con <output id="umbral-valor" for="umbral">10</output>+ menciones</label>
+    <input type="range" id="umbral" min="2" max="40" step="1" value="10">
+  </div>
+  <div class="control control-busqueda">
+    <label for="buscar">Seguir a una persona</label>
+    <div class="busqueda">
+      <input type="search" id="buscar" list="personas" autocomplete="off" placeholder="Escribe un nombre">
+      <button type="button" id="limpiar" class="boton-secundario" hidden>Quitar</button>
+    </div>
+    <datalist id="personas"></datalist>
+  </div>
+  <div class="control control-compartir">
+    <button type="button" id="copiar" class="boton-secundario">Copiar enlace a esta vista</button>
+    <span class="confirmacion" id="copiado" role="status"></span>
+  </div>
+</section>
+
+<main class="cuerpo">
+  <figure class="grafico">
+    <svg id="grafo" viewBox="0 0 1000 1000" role="img" aria-labelledby="grafo-titulo grafo-desc">
+      <title id="grafo-titulo">Grafo circular de menciones entre parlamentarios</title>
+      <desc id="grafo-desc">Cada punto es un parlamentario, agrupado por bloque alrededor del círculo; cada línea une a dos personas que se nombraron. La tabla bajo el gráfico tiene los mismos datos.</desc>
+      <g id="capa-aristas"></g>
+      <g id="capa-nodos"></g>
+      <g id="capa-rotulos"></g>
+    </svg>
+    <div class="tooltip" id="tooltip" role="status" hidden></div>
+    <p class="aviso-vacio" id="aviso-vacio" hidden></p>
+    <figcaption>
+      <ul class="leyenda" id="leyenda" aria-label="Bloques"></ul>
+      <ul class="leyenda leyenda-formas" aria-label="Corporaciones">
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6"></circle></svg>Senado</li>
+        <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1 L15 8 L8 15 L1 8 Z"></path></svg>Cámara de Diputados</li>
+        <li><span class="muestra-linea cruza"></span>cruza entre bloques</li>
+        <li><span class="muestra-linea dentro"></span>dentro del bloque</li>
+      </ul>
+    </figcaption>
+  </figure>
+
+  <aside class="panel" id="panel" aria-live="polite">
+    <div id="panel-vacio">
+      <h2>Cómo usarlo</h2>
+      <p>Pasa el cursor sobre un punto para ver a esa persona; haz clic (o toca) para seguirla en todos los períodos. También puedes buscarla por nombre.</p>
+      <h2>Cómo leerlo</h2>
+      <p id="lectura"></p>
+      <p id="lectura-filtro">Con el filtro «Senado» o «Diputados» se cuentan solo las menciones entre miembros de esa corporación: «nombrada 90 veces» pasa a ser «nombrada 90 veces por senadores».</p>
+      <p id="lectura-designados" hidden>«Designados» reúne a los senadores institucionales y vitalicios (hasta 2006): no fueron elegidos y no tienen pacto, así que forman bloque propio. Al ser un bloque más, bajan la tasa «al azar» del período.</p>
+    </div>
+    <div id="panel-persona" hidden>
+      <h2 id="persona-nombre"></h2>
+      <p class="nota" id="persona-nota"></p>
+      <svg id="persona-barras" class="barras" role="img" aria-label="Veces que fue nombrada, por período"></svg>
+      <div class="tabla-envoltorio">
+        <table class="tabla" id="persona-tabla">
+          <caption>Trayectoria por período</caption>
+          <thead><tr><th scope="col">Período</th><th scope="col">Corporación</th><th scope="col">Bloque</th><th scope="col" class="num">Nombrada</th><th scope="col" class="num" title="Porcentaje de las veces que fue nombrada que vino de parlamentarios de otros bloques">De otros bloques</th><th scope="col" class="num">Nombra</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<section class="detalle">
+  <details>
+    <summary>Ver como tabla: las personas más nombradas del período</summary>
+    <div class="tabla-envoltorio">
+      <table class="tabla" id="tabla-periodo">
+        <thead><tr><th scope="col">Persona</th><th scope="col">Corporación</th><th scope="col">Bloque</th><th scope="col" class="num" id="th-nombrada">Nombrada</th><th scope="col" class="num">De otros bloques</th><th scope="col" class="num">Nombra</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </details>
+  <p class="fuente" id="fuente"></p>
+  <p class="fuente" id="cobertura"></p>
+  <p class="fuente">Método: una mención es «senador/diputado + apellido» dicho en la sala por otro parlamentario, resuelta contra la nómina del período; la testera («tiene la palabra…») y las menciones ambiguas quedan fuera. El bloque de cada persona es el pacto con que su partido fue a la elección que abrió el período; quien fue electo fuera de pacto va al bloque de su comité parlamentario. Una persona se sigue entre períodos por su Reseña Parlamentaria de la BCN.</p>
+</section>
+</div>
+
+<footer class="sitio-pie">
+  <div class="contenedor">
+    <p>Iniciativa Polímetro · Inteligencia del ecosistema político chileno</p>
+    <p><a href="../#contacto">Escríbenos</a> · <a href="https://polimetro.substack.com/p/como-medimos">Cómo medimos</a></p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
