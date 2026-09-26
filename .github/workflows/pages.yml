@@ -25,7 +25,8 @@ concurrency:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    # Sistema fijo: `ubuntu-latest` cambia de versión solo (§10).
+    runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment:
       name: github-pages
