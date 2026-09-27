@@ -96,6 +96,7 @@
         <li><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1 L15 8 L8 15 L1 8 Z"></path></svg>Cámara de Diputados</li>
         <li><span class="muestra-linea cruza"></span>cruza entre bloques</li>
         <li><span class="muestra-linea dentro"></span>dentro del bloque</li>
+        <li id="leyenda-ruptura" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><circle class="muestra-ruptura" cx="8" cy="8" r="6"></circle></svg>rompió con su pacto durante el período (sus cifras cuentan en el bloque por el que fue electo)</li>
       </ul>
     </figcaption>
   </figure>
@@ -112,6 +113,7 @@
     <div id="panel-persona" hidden>
       <h2 id="persona-nombre"></h2>
       <p class="nota" id="persona-nota"></p>
+      <ul class="rupturas" id="persona-rupturas" aria-label="Rupturas con su pacto" hidden></ul>
       <svg id="persona-barras" class="barras" role="img" aria-label="Veces que fue nombrada, por período"></svg>
       <div class="tabla-envoltorio">
         <table class="tabla" id="persona-tabla">

@@ -3,12 +3,11 @@
  *
  * Colores, tipografías, cabecera, pie y botones vienen de ../assets/brand/tokens.css
  * (generado desde lib/publish.py con `radar brand-css`) y ../assets/brand/base.css.
- * Los dos tokens de abajo son del dashboard y no de la marca.
+ * La línea «dentro del bloque» (--arista-dentro) también viene de tokens.css: desde el
+ * 2026-09-26 el grafo del newsletter la dibuja del mismo color. El token de abajo es
+ * del dashboard y no de la marca.
  */
 :root {
-  /* Línea entre dos personas del mismo bloque: un azul de la cianotipia, más oscuro
-     que cualquier nodo, para que la vista la lea como fondo. */
-  --arista-dentro: #2b5a86;
   /* Línea que cruza entre bloques: el gris frío de «Otros». Desde el 2026-09-26 ningún
      bloque de pacto ni «Otros»/«Independientes» lo usa (solo «Designados», hasta 2006,
      y ahí va como nodo lleno, no como línea translúcida). */
@@ -109,6 +108,9 @@ input[type="search"] {
 .arista-toque { fill: none; stroke: transparent; stroke-width: 10; cursor: pointer; }
 .nodo { stroke: var(--superficie); stroke-width: 1.5; cursor: pointer; }
 .atenuado { opacity: 0.12; }
+/* Ruptura con el pacto: anillo punteado por fuera del nodo, sin cambiar el color del
+   bloque (las cifras siguen en el bloque de su elección). No captura el puntero. */
+.anillo-ruptura { fill: none; stroke: var(--tinta); stroke-width: 1.5; stroke-dasharray: 3 2.5; pointer-events: none; }
 .resaltado { stroke: var(--acento); stroke-width: 3; }
 .arista.resaltada { stroke: var(--acento); opacity: 0.9; }
 .rotulo {
@@ -157,6 +159,9 @@ input[type="search"] {
 .leyenda li { display: flex; align-items: center; gap: 6px; }
 .leyenda .punto { width: 12px; height: 12px; border-radius: 50%; }
 .leyenda-formas svg { width: 14px; height: 14px; fill: var(--tinta-secundaria); }
+.leyenda-formas .muestra-ruptura { fill: none; stroke: var(--tinta); stroke-width: 1.5; stroke-dasharray: 3 2.5; }
+.rupturas { margin: 8px 0; padding-left: 18px; font-size: 14px; color: var(--tinta-secundaria); }
+.rupturas li { margin: 4px 0; }
 .muestra-linea { display: inline-block; width: 20px; height: 3px; border-radius: 2px; }
 .muestra-linea.cruza { background: var(--arista-cruza); }
 .muestra-linea.dentro { background: var(--arista-dentro); }

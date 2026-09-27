@@ -20,6 +20,7 @@
   const UMBRAL_POR_DEFECTO = 10;     // el de la figura publicada, si el período no trae el suyo
   const AVISO_COPIADO_MS = 2500;
   const DISTANCIA_ROTULO = 16;
+  const SEPARACION_ANILLO = 3.5;     // px entre el nodo y el anillo de ruptura
   // Ancho de la línea por tramos de volumen: los de la figura publicada.
   const TRAMOS_ARISTA = [[20, 0.9], [40, 2.0], [80, 3.6], [Infinity, 6.0]];
   const CAMARAS = [
@@ -31,7 +32,9 @@
 
   const $ = (id) => document.getElementById(id);
   const estado = {
-    periodo: DATOS.periodos[DATOS.periodos.length - 1].nombre,
+    // Se abre en el último período cerrado: el en curso tiene pocos meses y un grafo ralo
+    // (decisión del 2026-09-27). Queda a un clic, y un enlace con #periodo= manda.
+    periodo: (DATOS.periodos.filter((p) => !p.en_curso).pop() || DATOS.periodos[DATOS.periodos.length - 1]).nombre,
     camara: 'ambas',
     umbral: UMBRAL_POR_DEFECTO,
     // Mientras nadie mueva el control, el umbral sigue al período elegido (cada uno trae
@@ -156,10 +159,16 @@
       const { x, y } = pos.get(i);
       const figura = forma(nodo, x, y, radioDe(recibidasDe(nodo)), capaNodos);
       figura.setAttribute('class', `nodo${nodo.id === estado.persona ? ' resaltado' : ''}`);
+      if (nodo.ruptura) {
+        // Anillo exterior, separado del nodo: se lee contra el fondo sea cual sea el color
+        // del bloque, y no tapa el color (las cifras siguen en el bloque de su elección).
+        const alcance = radioDe(recibidasDe(nodo)) * (nodo.camara === 'diputados' ? 1.25 : 1);
+        crear('circle', { cx: x, cy: y, r: alcance + SEPARACION_ANILLO, class: 'anillo-ruptura', 'data-i': i }, capaNodos);
+      }
       figura.setAttribute('fill', colores[nodo.bloque]);
       figura.setAttribute('data-i', i);
       const titulo = crear('title', {}, figura);
-      titulo.textContent = `${nodo.nombre} (${nodo.bloque})`;
+      titulo.textContent = `${nodo.nombre} (${nodo.bloque}${nodo.ruptura ? ', rompió con su pacto' : ''})`;
       // En pantalla táctil el «hover» y el toque llegan juntos: ahí solo vale el toque,
       // que abre el panel con la misma información que el tooltip.
       figura.addEventListener('pointerenter', (ev) => {
@@ -211,7 +220,7 @@
       l.classList.toggle('resaltada', toca);
       if (toca) { vecinos.add(l.dataset.a); vecinos.add(l.dataset.b); }
     });
-    document.querySelectorAll('#capa-nodos .nodo').forEach((n) => {
+    document.querySelectorAll('#capa-nodos .nodo, #capa-nodos .anillo-ruptura').forEach((n) => {
       n.classList.toggle('atenuado', !vecinos.has(n.dataset.i));
     });
   }
@@ -257,6 +266,7 @@
       `${NOMBRE_CAMARA[n.camara] || n.camara} · ${n.bloque}${n.partido ? ` · ${n.partido}` : ''}`,
       `Nombrada ${miles(recibidas)} veces${quien}${recibidas ? `, ${porcentaje(otros / recibidas)} desde otros bloques` : ''}`,
       `Nombra ${miles(n.hechas)} veces`,
+      ...(n.ruptura ? [`Rompe con su pacto (${n.ruptura.fecha}): ${n.ruptura.hacia}`] : []),
       'Clic: seguir en todos los períodos',
     ]);
     ubicarTooltip(ev);
@@ -302,6 +312,7 @@
   }
 
   function escribirLeyenda(periodo) {
+    $('leyenda-ruptura').hidden = !periodo.nodos.some((n) => n.ruptura);
     const ul = $('leyenda');
     ul.replaceChildren();
     for (const bloque of periodo.bloques) {
@@ -367,6 +378,7 @@
         ? ' Seguimiento por nombre: no tiene Reseña Parlamentaria de la BCN enlazada, así que un cambio en cómo se escribe su nombre puede separar períodos.'
         : '');
     const filas = trayectoria(estado.persona);
+    escribirRupturas(filas);
     const cuerpo = $('persona-tabla').tBodies[0];
     cuerpo.replaceChildren();
     for (const { periodo, nodo } of filas) {
@@ -386,7 +398,15 @@
         vacio.colSpan = 5;
       } else {
         celda(tr, NOMBRE_CAMARA[nodo.camara] || nodo.camara);
-        celda(tr, nodo.bloque);
+        const bloque = celda(tr, nodo.bloque);
+        if (nodo.ruptura) {
+          // El mismo círculo punteado de la leyenda: el texto largo desbordaba la columna.
+          const marca = document.createElement('span');
+          marca.textContent = ' ◌';
+          marca.title = 'Rompió con su pacto durante el período';
+          marca.setAttribute('aria-label', 'rompió con su pacto durante el período');
+          bloque.appendChild(marca);
+        }
         celda(tr, miles(nodo.recibidas), true);
         celda(tr, nodo.recibidas ? porcentaje(nodo.recibidas_otros / nodo.recibidas) : '—', true);
         celda(tr, miles(nodo.hechas), true);
@@ -394,6 +414,25 @@
       cuerpo.appendChild(tr);
     }
     dibujarBarras(filas);
+  }
+
+  // Una línea por período en que la persona rompió con su pacto, con su fuente.
+  function escribirRupturas(filas) {
+    const ul = $('persona-rupturas');
+    ul.replaceChildren();
+    const conRuptura = filas.filter(({ nodo }) => nodo && nodo.ruptura);
+    ul.hidden = conRuptura.length === 0;
+    for (const { periodo, nodo } of conRuptura) {
+      const li = document.createElement('li');
+      li.append(`${periodo.etiqueta}: ${nodo.ruptura.resumen} `);
+      const enlace = document.createElement('a');
+      enlace.href = nodo.ruptura.fuente;
+      enlace.target = '_blank';
+      enlace.rel = 'noopener noreferrer';
+      enlace.textContent = 'Fuente';
+      li.appendChild(enlace);
+      ul.appendChild(li);
+    }
   }
 
   function dibujarBarras(filas) {
