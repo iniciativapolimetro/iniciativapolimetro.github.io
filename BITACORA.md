@@ -3,6 +3,10 @@
 Registro de sesiones de trabajo en este repo, lo más nuevo arriba. 1-3 líneas por
 sesión. El estado vigente NO vive aquí: vive en `CLAUDE.md` (sección `## Estado`).
 
+`2026-10-04` — Dashboard de menciones actualizado desde congress-radar (`main`, 3-oct): entran las 129
+sesiones del Senado que faltaban (senado.cl migró de host), aristas nuevas en cinco períodos y sale el aviso
+«Senado incompleto» de 2022-2026. Pendiente: probar en celular real.
+
 `2026-09-27` — Dashboard de menciones actualizado desde congress-radar (`106ab8a`): bloques y
 erratas de los diez períodos, rupturas con el pacto, abre en 2022-2026. Pendiente: probar en celular real.
 
