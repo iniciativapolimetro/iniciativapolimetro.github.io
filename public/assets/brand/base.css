@@ -1,0 +1,191 @@
+/*
+ * Base de las páginas públicas de la marca (landing, dashboard): fuentes locales,
+ * reset, tipografía, layout y componentes compartidos.
+ *
+ * Se copia tal cual con `radar brand-css`. No lleva un solo color escrito: todo sale de
+ * las variables de `tokens.css` (generado desde lib/publish.py), que se carga ANTES.
+ * Lo específico de una página (el grafo del dashboard, el héroe de la landing) vive en
+ * el CSS propio de esa página.
+ */
+
+/* --- Fuentes, alojadas junto a la página (SIL OFL 1.1, licencias en fonts/) --------- */
+/* Sin Google Fonts a propósito: la visita no llama a un tercero y la página funciona
+   sin red. Solo el subconjunto latino, que cubre el español completo. */
+@font-face { font-family: 'Lato'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url('fonts/lato-400.woff2') format('woff2'); }
+@font-face { font-family: 'Lato'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url('fonts/lato-400-italic.woff2') format('woff2'); }
+@font-face { font-family: 'Lato'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url('fonts/lato-700.woff2') format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 600;
+  font-display: swap; src: url('fonts/playfair-display-600.woff2') format('woff2'); }
+@font-face { font-family: 'IBM Plex Mono'; font-style: normal; font-weight: 500;
+  font-display: swap; src: url('fonts/ibm-plex-mono-500.woff2') format('woff2'); }
+
+/* --- Medidas del sistema (no son de marca: son de layout) --------------------------- */
+:root {
+  --radio: 6px;
+  --ancho-contenido: 1120px;
+  --ancho-lectura: 68ch;
+  --gutter: 16px;
+  --espacio-seccion: clamp(56px, 9vw, 112px);
+}
+
+/* --- Reset mínimo ------------------------------------------------------------------ */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--superficie);
+  color: var(--tinta);
+  font: 17px/1.6 var(--fuente-cuerpo);
+  text-rendering: optimizeLegibility;
+}
+img, svg { max-width: 100%; }
+a { color: inherit; text-underline-offset: 0.2em; }
+a:hover { color: var(--acento); }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 3px; border-radius: 2px; }
+::selection { background: var(--acento); color: var(--superficie); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+/* Enlace para saltar la navegación con teclado: invisible hasta recibir foco. */
+.saltar {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  padding: 8px 12px;
+  background: var(--acento);
+  color: var(--superficie);
+  border-radius: var(--radio);
+  z-index: 10;
+}
+.saltar:focus { top: 8px; }
+
+/* --- Layout ------------------------------------------------------------------------ */
+.contenedor {
+  width: 100%;
+  max-width: var(--ancho-contenido);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.seccion { padding-block: var(--espacio-seccion); border-top: 1px solid var(--grilla); }
+.seccion:first-of-type { border-top: 0; }
+
+/* --- Tipografía -------------------------------------------------------------------- */
+h1, h2, h3 { margin: 0; font-weight: 600; text-wrap: balance; }
+.titular {
+  font-family: var(--fuente-titular);
+  font-size: clamp(34px, 6vw, 64px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+h2, .titulo-seccion {
+  font-family: var(--fuente-titular);
+  font-size: clamp(26px, 3.6vw, 40px);
+  line-height: 1.15;
+}
+h3 { font-family: var(--fuente-cuerpo); font-size: 19px; font-weight: 700; line-height: 1.3; }
+p { margin: 0 0 1em; }
+.lead { font-size: clamp(18px, 2vw, 21px); color: var(--tinta-secundaria); max-width: var(--ancho-lectura); }
+.tenue { color: var(--tinta-tenue); }
+
+/* El sello: la marca en mayúsculas, espaciada, en la monoespaciada. Lo mismo que va
+   arriba del titular de cada figura publicada. */
+.sello, .rotulo-mono {
+  font-family: var(--fuente-sello);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: var(--sello-espaciado);
+  text-transform: uppercase;
+  color: var(--tinta-tenue);
+}
+.rotulo-mono { display: block; margin-bottom: 14px; }
+
+/* --- Cabecera del sitio (idéntica en todas las páginas) ----------------------------- */
+.sitio-cabecera {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: color-mix(in srgb, var(--superficie) 92%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--grilla);
+}
+.sitio-cabecera .contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  min-height: 60px;
+  padding-block: 10px;
+}
+.sitio-cabecera .sello { color: var(--tinta); text-decoration: none; display: inline-flex; align-items: center; gap: 10px; }
+.sitio-cabecera .sello::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background: var(--paleta-2);
+}
+.sitio-nav { display: flex; flex-wrap: wrap; gap: 4px 20px; margin: 0; padding: 0; list-style: none; }
+.sitio-nav a {
+  font-family: var(--fuente-sello);
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tinta-secundaria);
+  text-decoration: none;
+}
+.sitio-nav a:hover, .sitio-nav a[aria-current="page"] { color: var(--acento); }
+/* En pantalla angosta la navegación ocupa varias líneas: fija arriba se comería la
+   pantalla, así que ahí se desplaza con la página. */
+@media (max-width: 640px) {
+  .sitio-cabecera { position: static; }
+}
+
+/* --- Botones ----------------------------------------------------------------------- */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 20px;
+  font-family: var(--fuente-sello);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--superficie);
+  background: var(--acento);
+  border: 1px solid var(--acento);
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+.boton:hover { color: var(--superficie); filter: brightness(1.08); }
+.boton-fantasma { color: var(--tinta); background: transparent; border-color: var(--grilla); }
+.boton-fantasma:hover { color: var(--acento); border-color: var(--acento); filter: none; }
+
+/* --- Tarjetas y grillas ------------------------------------------------------------- */
+.grilla { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); }
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: var(--superficie-alta);
+  border: 1px solid var(--grilla);
+  border-radius: var(--radio);
+}
+.tarjeta p:last-child { margin-bottom: 0; }
+.tarjeta p { color: var(--tinta-secundaria); }
+a.tarjeta { text-decoration: none; transition: border-color 0.15s; }
+a.tarjeta:hover { border-color: var(--acento); color: inherit; }
+
+/* --- Pie del sitio ------------------------------------------------------------------ */
+.sitio-pie { border-top: 1px solid var(--grilla); padding-block: 32px 48px; }
+.sitio-pie .contenedor { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; }
+.sitio-pie p { margin: 0; font-size: 14px; color: var(--tinta-tenue); }
+.sitio-pie a { color: var(--tinta-secundaria); }
+.sitio-pie .aviso-privacidad { flex-basis: 100%; font-size: 13px; }

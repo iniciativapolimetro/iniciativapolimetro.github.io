@@ -1,0 +1,9 @@
+# Fin de línea LF en todo el texto, en el repositorio Y en la copia de trabajo, igual que
+# .editorconfig. Sin esto, core.autocrlf=true en Windows dejaba archivos en CRLF que git
+# marcaba como modificados sin cambio de contenido (base.css y favicon.svg, 2026-10-04).
+* text=auto eol=lf
+
+# Binarios: nunca se convierten.
+*.woff2 binary
+*.jpg binary
+*.png binary

@@ -1,0 +1,246 @@
+/*
+ * Dashboard de menciones: SOLO lo propio del grafo y sus controles.
+ *
+ * Colores, tipografías, cabecera, pie y botones vienen de ../assets/brand/tokens.css
+ * (generado desde lib/publish.py con `radar brand-css`) y ../assets/brand/base.css.
+ * La línea «dentro del bloque» (--arista-dentro) también viene de tokens.css: desde el
+ * 2026-09-26 el grafo del newsletter la dibuja del mismo color. El token de abajo es
+ * del dashboard y no de la marca.
+ */
+:root {
+  /* Línea que cruza entre bloques: el gris frío de «Otros». Desde el 2026-09-26 ningún
+     bloque de pacto ni «Otros»/«Independientes» lo usa (solo «Designados», hasta 2006,
+     y ahí va como nodo lleno, no como línea translúcida). */
+  --arista-cruza: var(--otros);
+}
+
+/* El tablero es más ancho que una página de lectura: cabecera y pie lo acompañan para
+   que el sello quede alineado con el contenido. */
+.tablero, .sitio-cabecera .contenedor, .sitio-pie .contenedor { max-width: 1280px; }
+.tablero { padding-block: 28px 48px; font-size: 16px; }
+
+.cabecera h1 {
+  margin: 0 0 8px;
+  font: 600 clamp(22px, 3.2vw, 32px)/1.2 var(--fuente-titular);
+}
+.subtitulo { margin: 0; color: var(--tinta-secundaria); max-width: 72ch; }
+
+.avisos {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  list-style: none;
+  max-width: 72ch;
+  font-size: 14px;
+  color: var(--tinta);
+  background: color-mix(in srgb, var(--acento) 12%, transparent);
+  border-left: 3px solid var(--acento);
+  border-radius: var(--radio);
+}
+.avisos li + li { margin-top: 4px; }
+
+/* --- Controles --------------------------------------------------------------------- */
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 28px;
+  align-items: flex-end;
+  margin: 24px 0 8px;
+  padding: 16px;
+  background: var(--superficie-alta);
+  border: 1px solid var(--grilla);
+  border-radius: var(--radio);
+}
+.control { border: 0; margin: 0; padding: 0; min-width: 0; }
+.control legend, .control > label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--tinta-tenue);
+}
+.control-periodos { flex: 1 1 100%; }
+.control-compartir { display: flex; align-items: center; gap: 10px; }
+
+.botones { display: flex; flex-wrap: wrap; gap: 6px; }
+.botones button, .boton-secundario {
+  font: inherit;
+  font-size: 14px;
+  padding: 6px 10px;
+  color: var(--tinta-secundaria);
+  background: transparent;
+  border: 1px solid var(--grilla);
+  border-radius: var(--radio);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+.botones button:hover, .boton-secundario:hover { border-color: var(--tinta-tenue); color: var(--tinta); }
+.botones button[aria-checked="true"] {
+  color: var(--superficie);
+  background: var(--tinta-secundaria);
+  border-color: var(--tinta-secundaria);
+}
+.confirmacion { font-size: 13px; color: var(--acento); overflow-wrap: anywhere; user-select: all; }
+
+input[type="range"] { width: 220px; max-width: 100%; accent-color: var(--tinta-secundaria); }
+.busqueda { display: flex; gap: 6px; }
+input[type="search"] {
+  font: inherit;
+  width: min(320px, 70vw);
+  padding: 6px 10px;
+  color: var(--tinta);
+  background: var(--superficie);
+  border: 1px solid var(--grilla);
+  border-radius: var(--radio);
+}
+
+/* --- Gráfico y panel --------------------------------------------------------------- */
+.cuerpo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  gap: 24px;
+  align-items: start;
+}
+.grafico { position: relative; margin: 0; }
+#grafo { display: block; width: 100%; height: auto; touch-action: manipulation; }
+
+.arista { fill: none; stroke-linecap: round; }
+.arista.cruza { stroke: var(--arista-cruza); }
+.arista.dentro { stroke: var(--arista-dentro); }
+.arista-toque { fill: none; stroke: transparent; stroke-width: 10; cursor: pointer; }
+.nodo { stroke: var(--superficie); stroke-width: 1.5; cursor: pointer; }
+.atenuado { opacity: 0.12; }
+/* Ruptura con el pacto: anillo punteado por fuera del nodo, sin cambiar el color del
+   bloque (las cifras siguen en el bloque de su elección). No captura el puntero. */
+.anillo-ruptura { fill: none; stroke: var(--tinta); stroke-width: 1.5; stroke-dasharray: 3 2.5; pointer-events: none; }
+.resaltado { stroke: var(--acento); stroke-width: 3; }
+.arista.resaltada { stroke: var(--acento); opacity: 0.9; }
+.rotulo {
+  font: 13px var(--fuente-cuerpo);
+  fill: var(--tinta-secundaria);
+  paint-order: stroke;
+  stroke: var(--superficie);
+  stroke-width: 4px;
+  pointer-events: none;
+}
+.rotulo.fuerte { fill: var(--acento); font-weight: 700; }
+
+.tooltip {
+  position: absolute;
+  z-index: 2;
+  max-width: 280px;
+  padding: 8px 10px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--tinta);
+  background: color-mix(in srgb, var(--superficie) 96%, transparent);
+  border: 1px solid var(--grilla);
+  border-radius: var(--radio);
+  pointer-events: none;
+}
+.tooltip strong { display: block; font-size: 14px; }
+
+.aviso-vacio {
+  position: absolute;
+  inset: 45% 10% auto;
+  margin: 0;
+  text-align: center;
+  color: var(--tinta-tenue);
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  color: var(--tinta-secundaria);
+}
+.leyenda li { display: flex; align-items: center; gap: 6px; }
+.leyenda .punto { width: 12px; height: 12px; border-radius: 50%; }
+.leyenda-formas svg { width: 14px; height: 14px; fill: var(--tinta-secundaria); }
+.leyenda-formas .muestra-ruptura { fill: none; stroke: var(--tinta); stroke-width: 1.5; stroke-dasharray: 3 2.5; }
+.rupturas { margin: 8px 0; padding-left: 18px; font-size: 14px; color: var(--tinta-secundaria); }
+.rupturas li { margin: 4px 0; }
+.muestra-linea { display: inline-block; width: 20px; height: 3px; border-radius: 2px; }
+.muestra-linea.cruza { background: var(--arista-cruza); }
+.muestra-linea.dentro { background: var(--arista-dentro); }
+
+.panel {
+  padding: 16px;
+  background: var(--superficie-alta);
+  border: 1px solid var(--grilla);
+  border-radius: var(--radio);
+}
+.panel h2 { margin: 0 0 8px; font: 700 18px/1.3 var(--fuente-cuerpo); }
+.panel h2 + p { margin-top: 0; }
+.panel p { color: var(--tinta-secundaria); font-size: 15px; }
+.nota { font-size: 13px !important; color: var(--tinta-tenue) !important; }
+
+.barras { display: block; width: 100%; height: 150px; margin: 8px 0 12px; }
+.barras .barra { fill: var(--tinta-secundaria); }
+.barras .barra.actual { fill: var(--acento); }
+.barras text { font: 11px var(--fuente-cuerpo); fill: var(--tinta-tenue); }
+.barras text.valor { fill: var(--tinta); }
+
+/* De qué habla: nombre del tema (hace wrap a 375 px) y su porcentaje en la misma línea;
+   la barra debajo, a todo el ancho. */
+.temas { margin: 4px 0 14px; }
+.temas h3 { margin: 0 0 6px; font: 700 15px/1.3 var(--fuente-cuerpo); }
+.temas ol { margin: 0; padding: 0; list-style: none; }
+.temas li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 8px;
+  row-gap: 3px;
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+.tema-nombre { color: var(--tinta); overflow-wrap: anywhere; }
+.tema-cifra { color: var(--tinta-secundaria); font-variant-numeric: tabular-nums; text-align: right; }
+.tema-pista {
+  grid-column: 1 / -1;
+  display: block;
+  height: 6px;
+  background: var(--grilla);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.tema-barra { display: block; height: 100%; background: var(--acento); border-radius: 3px; }
+
+.tabla-envoltorio { overflow-x: auto; }
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+.tabla caption { text-align: left; color: var(--tinta-tenue); padding-bottom: 4px; }
+.tabla th, .tabla td {
+  padding: 5px 6px;
+  text-align: left;
+  border-bottom: 1px solid var(--grilla);
+  white-space: nowrap;
+}
+.tabla th { color: var(--tinta-tenue); font-weight: 400; }
+.tabla .num { text-align: right; }
+.tabla tr.actual td { color: var(--acento); }
+.tabla tr.ausente td { color: var(--tinta-tenue); }
+.tabla button.enlace {
+  font: inherit;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 0;
+  text-decoration: underline dotted;
+  cursor: pointer;
+}
+
+.detalle { margin-top: 24px; }
+.detalle summary { cursor: pointer; color: var(--tinta-secundaria); }
+.fuente { margin: 12px 0 0; font-size: 13px; color: var(--tinta-tenue); max-width: 90ch; }
+
+@media (max-width: 960px) {
+  .cuerpo { grid-template-columns: minmax(0, 1fr); }
+  .rotulo { font-size: 18px; }
+}

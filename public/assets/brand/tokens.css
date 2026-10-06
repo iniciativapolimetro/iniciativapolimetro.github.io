@@ -1,0 +1,40 @@
+/* GENERADO por `radar brand-css` desde congress-radar (config/brand.py + reports/publish.py). NO EDITAR A MANO: se sobrescribe. */
+:root {
+  color-scheme: dark;
+  --superficie: #051626;
+  --superficie-alta: #0a2238;
+  --tinta: #eff8ff;
+  --tinta-secundaria: #a6d3e8;
+  --tinta-tenue: #7e9cb5;
+  --grilla: #16385a;
+  --acento: #e0a23c;
+  --otros: #5a7085;
+  --arista-dentro: #2b5a86;
+  --sin-dato: #2f3d4a;
+  --neutro-claro: #b0aca4;
+  --neutro-oscuro: #7a7a75;
+  --paleta-0: #eff8ff;
+  --paleta-1: #a6d3e8;
+  --paleta-2: #5b9fc4;
+  --paleta-3: #35688f;
+  --paleta-4: #e0a23c;
+  --paleta-5: #c96a3a;
+  --paleta-6: #7fbf6a;
+  --paleta-7: #7f96a8;
+  --rampa-0: #06192a;
+  --rampa-1: #0f3252;
+  --rampa-2: #1a4b74;
+  --rampa-3: #2e6c9b;
+  --rampa-4: #4a89b2;
+  --rampa-5: #6aa5c3;
+  --rampa-6: #87b9d2;
+  --rampa-7: #9bc8db;
+  --rampa-8: #b2d6e6;
+  --rampa-9: #c7e1ee;
+  --rampa-10: #dbeef5;
+  --fuente-cuerpo: Lato, Segoe UI, system-ui, sans-serif;
+  --fuente-titular: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --fuente-sello: 'IBM Plex Mono', Consolas, 'Courier New', monospace;
+  --sello-espaciado: 0.22em;
+  --sello-texto: "INICIATIVA POLÍMETRO";
+}

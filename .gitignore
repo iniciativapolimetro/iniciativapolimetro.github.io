@@ -1,0 +1,77 @@
+# Punto de partida del .gitignore de un proyecto nuevo (§4).
+# Copiar como .gitignore en la raíz del proyecto y recortar lo que sobre.
+# Regla: el proyecto arranca con esto YA puesto, antes del primer commit.
+
+# ─── Secretos — nunca versionar ───
+.env
+.env.*
+!.env.example
+secrets.*
+!secrets.*.example
+*.key
+*.pem
+*.p12
+*.jks
+*.keystore
+credentials.json
+service-account*.json
+token.json
+local.properties
+
+# ─── Entornos y dependencias ───
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+node_modules/
+.gradle/
+vendor/
+
+# ─── Artefactos de build ───
+build/
+dist/
+out/
+target/
+bin/
+obj/
+*.egg-info/
+*.apk
+*.aab
+*.exe
+*.o
+*.so
+*.dll
+
+# ─── Modelos, datos y salidas pesadas ───
+models/
+datasets/
+data/
+checkpoints/
+*.gguf
+*.onnx
+*.pt
+*.pth
+*.tflite
+*.safetensors
+
+# ─── Logs y media generada ───
+logs/
+*.log
+output/
+
+# ─── Cachés de herramientas ───
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.tox/
+.coverage
+htmlcov/
+
+# ─── Sistema y editores ───
+Thumbs.db
+desktop.ini
+.DS_Store
+.idea/
+.vscode/
+*.swp
