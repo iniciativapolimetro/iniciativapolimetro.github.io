@@ -3,6 +3,10 @@
 Registro de sesiones de trabajo en este repo, lo más nuevo arriba. 1-3 líneas por
 sesión. El estado vigente NO vive aquí: vive en `CLAUDE.md` (sección `## Estado`).
 
+`2026-10-06` — Dashboard de menciones actualizado (menciones corregidas, vitalicios) e historia del
+repo reescrita a un commit con respaldo local; publicado y verificado. Pendiente: borrar la lista de
+despliegues viejos en GitHub (tuyo) y probar en celular.
+
 `2026-10-04` (2) — Dashboard de menciones con «De qué habla» desde congress-radar (`6498fac`): el panel
 de cada persona muestra sus cinco temas de debate del período con % de su agenda; el Método declara
 el límite del modelo sin cifra. Probado servido por HTTP local. Pendiente: probar en celular real.

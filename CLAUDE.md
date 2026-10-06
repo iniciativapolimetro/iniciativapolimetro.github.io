@@ -12,9 +12,9 @@ o una recomendación entienda qué hacemos (inteligencia del ecosistema polític
 vea evidencia real (el dashboard del Congreso) y tenga cómo escribirnos.
 
 ## Estado
-**en producción** — `2026-09-26` — reescrita entera: HTML semántico sin JS, en la
-cianotipia de la marca, con el dashboard «Quién nombra a quién» en `/menciones/`. Se
-publica solo `public/` con GitHub Actions.
+**en producción** — `2026-10-06` — HTML semántico sin JS, en la cianotipia de la marca, con
+el dashboard «Quién nombra a quién» en `/menciones/` (actualizado el 2026-10-06). Se publica
+solo `public/` con GitHub Actions. Historia de git reescrita a un solo commit ese día.
 **Siguiente paso:** probar en un celular real; enlazar el dashboard desde el newsletter.
 
 ## MVP hecho cuando:
@@ -85,6 +85,9 @@ Vacío = bien.
 
 ## Decisiones (vigentes)
 Índice: una línea por decisión. La entrada completa vive en `decisiones-detalle.md`.
+
+- `2026-10-06` — Historia del repo público reescrita a un solo commit para que solo se vea la
+  publicación vigente; respaldo completo fuera del repo.
 
 - `2026-09-26` — Landing reescrita a mano (HTML/CSS sin build ni JS), en la cianotipia
   oscura de la marca, conservando la forma de trabajo de la versión anterior.

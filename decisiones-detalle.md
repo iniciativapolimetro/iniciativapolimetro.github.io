@@ -3,6 +3,21 @@
 Índice en `CLAUDE.md`. Lo más nuevo arriba. Las superadas se marcan y se mueven a
 `decisiones-archivo.md` (§7 de la raíz: marcar, nunca borrar).
 
+`2026-10-06` — **Historia del repo público reescrita a un solo commit** (pedido del usuario: «que
+el usuario solo vea lo de hoy»). El sitio nunca mostró versiones viejas; lo visible era el historial
+de git en GitHub (19 commits, con versiones viejas del dashboard).
+- *Cómo:* commit huérfano con el árbol vigente + el dashboard del día, `push --force-with-lease`
+  contra el commit conocido (`bb02e17`). Mismos 30 archivos; solo cambió `menciones/data.js`. El
+  push forzado no dispara el flujo de Pages (no hay diff calculable): se lanzó a mano con
+  `gh workflow run pages.yml --ref main`. Sitio verificado byte a byte contra lo generado.
+- *Respaldo:* `C:\dev\respaldos\landing-historia-hasta-2026-10-06.bundle` (toda la historia, fuera
+  de OneDrive y de todo repo, sin subir). Restaurar: `git clone <bundle> <carpeta>`.
+- *Límites:* no garantiza el olvido (GitHub puede servir un tiempo los commits viejos por su hash;
+  copias externas no se borran; purga total = soporte de GitHub). La lista de despliegues viejos
+  sigue en GitHub (borrarla quedó al usuario). Las ramas locales `respaldo-antes-de-reescribir` y
+  `refs/original` guardan historia vieja en este clon: no subirlas.
+- *Descartado:* publicar sin tocar la historia (recomendado; el usuario eligió reescribir).
+
 `2026-09-26` — **Las visitas se miden con Google Analytics 4 (el ID `G-HH0W14NTWF`, creado
 en abril), con la configuración en un archivo propio y activo solo en el dominio público.**
 
